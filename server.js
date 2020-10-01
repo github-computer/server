@@ -66,7 +66,7 @@ export default function(opt) {
 
         const isNewClientRequest = ctx.query['new'] !== undefined;
         if (isNewClientRequest) {
-            const reqId = "bonegames"
+            const reqId = "sabrehagen"
             debug('making new client with id %s', reqId);
             const info = await manager.newClient(reqId);
 

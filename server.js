@@ -3,10 +3,11 @@ import Koa from 'koa';
 import tldjs from 'tldjs';
 import Debug from 'debug';
 import http from 'http';
-import { hri } from 'human-readable-ids';
+import pkg from 'human-readable-ids';
+const { hri } = pkg;
 import Router from 'koa-router';
 
-import ClientManager from './lib/ClientManager';
+import ClientManager from './lib/ClientManager.js';
 
 const debug = Debug('localtunnel:server');
 
@@ -65,7 +66,7 @@ export default function(opt) {
 
         const isNewClientRequest = ctx.query['new'] !== undefined;
         if (isNewClientRequest) {
-            const reqId = hri.random();
+            const reqId = "bonegames"
             debug('making new client with id %s', reqId);
             const info = await manager.newClient(reqId);
 
@@ -93,9 +94,8 @@ export default function(opt) {
         }
 
         const reqId = parts[1];
-
         // limit requested hostnames to 63 characters
-        if (! /^(?:[a-z0-9][a-z0-9\-]{4,63}[a-z0-9]|[a-z0-9]{4,63})$/.test(reqId)) {
+        if (! /^(?:[a-z0-9][a-z0-9\-]{4,63}[a-z0-9]|[a-z0-9]{4,63})$/.cd(reqId)) {
             const msg = 'Invalid subdomain. Subdomains must be lowercase and between 4 and 63 alphanumeric characters.';
             ctx.status = 403;
             ctx.body = {
@@ -120,6 +120,7 @@ export default function(opt) {
     server.on('request', (req, res) => {
         // without a hostname, we won't know who the request is for
         const hostname = req.headers.host;
+        console.log(req.headers);
         if (!hostname) {
             res.statusCode = 400;
             res.end('Host header is required');
